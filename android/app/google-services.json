@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "541505886200",
+    "project_id": "kfonlnp",
+    "storage_bucket": "kfonlnp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541505886200:android:464240f2e8c06d2794a80d",
+        "android_client_info": {
+          "package_name": "co.in.kfon.lnp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6OBKlI7uUOP3uVngqISW7RIGF2H9CPhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

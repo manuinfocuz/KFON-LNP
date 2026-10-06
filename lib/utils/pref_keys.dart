@@ -1,0 +1,5 @@
+enum PrefKeys{
+  ISLOGIN,
+  LOGINDATA,
+  ONBOARD_COMPLETE,
+}
