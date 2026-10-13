@@ -160,6 +160,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final provider = Provider.of<LocaleProvider>(context);
 
     return ChangeNotifierProvider.value(
       value: localeProvider,
@@ -216,6 +217,34 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       //   ),
                       // ),
                     // ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Hello ',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: provider.profileDataModel?.regDetails.partnername ?? '',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),

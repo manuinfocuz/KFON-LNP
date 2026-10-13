@@ -66,94 +66,117 @@ class _NewSubSelectFormTypeScreenState
     );
   }
 
+
   Widget _buildPanel(SubFormSelectProvider provider) {
     var i = -1;
+
+    // e-CAF first, remaining items in their existing order
+    final cafTypes = provider.cafTypeDataModel?.caftypes.toList() ?? [];
+
+    cafTypes.sort((a, b) {
+      final aIsECaf = (a.cafname ?? '').toLowerCase().contains('e-caf');
+      final bIsECaf = (b.cafname ?? '').toLowerCase().contains('e-caf');
+
+      if (aIsECaf && !bIsECaf) return -1;
+      if (!aIsECaf && bIsECaf) return 1;
+      return 0;
+    });
+
     return ExpansionPanelList(
       expandIconColor: Colors.white,
       expansionCallback: (int index, bool isExpanded) {
         if (isExpanded) {
-          provider.getSUBType(
-            provider.cafTypeDataModel!.caftypes[index],
-          );
+          provider.getSUBType(cafTypes[index]);
         }
 
         setState(() {
-          provider.cafTypeDataModel?.caftypes[index].isExpended = isExpanded;
+          cafTypes[index].isExpended = isExpanded;
         });
       },
       children: provider.cafTypeDataModel == null
           ? []
-          : provider.cafTypeDataModel!.caftypes
-              .map<ExpansionPanel>((Caftype item) {
-              i++;
-              return ExpansionPanel(
-                backgroundColor: primaryColor,
-                headerBuilder: (BuildContext context, bool isExpanded) {
-                  return ListTile(
-                    onTap: () {
-                      item.isExpended = !item.isExpended;
-                      if (item.isExpended) {
-                        provider.getSUBType(item);
-                      }
-                      setState(() {});
-                    },
-                    title: Text(
-                      "${item.cafname}",
-                      style: const TextStyle(
-                        color: Colors.white, // White text for contrast
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                },
-                body: Column(
-                  children: List.generate(
-                    item.sType.length,
-                    (index) {
-                      var itemData = item.sType[index];
-                      return ListTile(
-                        tileColor: Colors.white, // Background for body items
-                        title: Text(
-                          "${itemData.profilename}",
-                          style: const TextStyle(
-                            color:
-                                primaryColor, // Text color matches primary theme
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.add,
-                          color:
-                              secondaryColor, // Use secondary color for icons
-                        ),
-                        onTap: () {
-                          if (item.caftypeid == "2") {
-                            _localeProvider.navigate(
-                              AppRoutes.AADHARDETAILSSCREEN,
-                              argument: [
-                                "${item.caftypeid}",
-                                "${itemData.profileid}",
-                                "${item.cafname}",
-                              ],
-                            );
-                          } else {
-                            _localeProvider.navigate(
-                              AppRoutes.CREATESUBSCRIBER,
-                              argument: [
-                                "${item.caftypeid}",
-                                "${itemData.profileid}",
-                                null,
-                                "${item.cafname}",
-                              ],
-                            );
-                          }
-                        },
-                      );
-                    },
-                  ),
+          : cafTypes.map<ExpansionPanel>((Caftype item) {
+        i++;
+
+        // SME connections are hidden for now.
+        final visibleTypes = item.sType
+            .where(
+              (type) => !(type.profilename ?? '')
+              .toLowerCase()
+              .contains('sme'),
+        )
+            .toList();
+
+        return ExpansionPanel(
+          backgroundColor: primaryColor,
+          headerBuilder: (BuildContext context, bool isExpanded) {
+            return ListTile(
+              onTap: () {
+                item.isExpended = !item.isExpended;
+
+                if (item.isExpended) {
+                  provider.getSUBType(item);
+                }
+
+                setState(() {});
+              },
+              title: Text(
+                "${item.cafname}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
-                isExpanded: item.isExpended,
-              );
-            }).toList(),
+              ),
+            );
+          },
+          body: Column(
+            children: List.generate(
+              visibleTypes.length,
+                  (index) {
+                var itemData = visibleTypes[index];
+
+                return ListTile(
+                  tileColor: Colors.white,
+                  title: Text(
+                    "${itemData.profilename}",
+                    style: const TextStyle(
+                      color: primaryColor,
+                    ),
+                  ),
+                  trailing: const Icon(
+                    Icons.add,
+                    color: secondaryColor,
+                  ),
+                  onTap: () {
+                    if (item.caftypeid == "2") {
+                      _localeProvider.navigate(
+                        AppRoutes.AADHARDETAILSSCREEN,
+                        argument: [
+                          "${item.caftypeid}",
+                          "${itemData.profileid}",
+                          "${item.cafname}",
+                        ],
+                      );
+                    } else {
+                      _localeProvider.navigate(
+                        AppRoutes.CREATESUBSCRIBER,
+                        argument: [
+                          "${item.caftypeid}",
+                          "${itemData.profileid}",
+                          null,
+                          "${item.cafname}",
+                        ],
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+          ),
+          isExpanded: item.isExpended,
+        );
+      }).toList(),
     );
   }
+
 }

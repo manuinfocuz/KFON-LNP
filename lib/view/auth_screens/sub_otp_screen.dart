@@ -16,11 +16,13 @@ class SubOtpScreen extends StatefulWidget {
     super.key,
     required this.username,
     required this.password, required this.mobile,
+    this.rememberMe = false,
   });
 
   final String username;
   final String password;
   final String mobile;
+  final bool rememberMe;
 
   @override
   State<SubOtpScreen> createState() => _SubOtpScreenState();
@@ -38,6 +40,7 @@ class _SubOtpScreenState extends State<SubOtpScreen> {
   @override
   void initState() {
     super.initState();
+    debugPrint('[RememberMe] OtpScreen opened, rememberMe=${widget.rememberMe}');
     startTimer();
   }
 
@@ -139,6 +142,7 @@ class _SubOtpScreenState extends State<SubOtpScreen> {
                             widget.username,
                             widget.password,
                             pinEditingController.text,
+                            rememberMe: widget.rememberMe,
                           );
 
                         } else {
@@ -185,6 +189,7 @@ class _SubOtpScreenState extends State<SubOtpScreen> {
                                     _localeProvider,
                                     widget.username,
                                     widget.password,
+                                    rememberMe: widget.rememberMe,
                                   );
                                   if (resp!=null) {
                                     startTimer();

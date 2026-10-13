@@ -215,6 +215,7 @@ class MyMaterialApp extends StatelessWidget {
               username: data[0],
               password: data[1],
               mobile: data[2],
+              rememberMe: data.length > 3 && data[3] == true,
             );
           },
           AppRoutes.ACTIVESUBSCRIBER.name: (context) {
@@ -344,6 +345,7 @@ class MyMaterialApp extends StatelessWidget {
           AppRoutes.newSubEnquiryScreen.name: (context) {
             return const NewSupEnquiresScreen();
           },
+
           AppRoutes.createTicketScreen.name: (context) {
             return const CreateTicketScreen();
           },

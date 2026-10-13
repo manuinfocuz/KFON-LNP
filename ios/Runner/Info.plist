@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -26,8 +27,16 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is required to capture photos for support tickets in the KFON LNP application.</string>
+
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We have support option where user can rise ticket with issue so we need</string>
+	<string>Photo library access is required to select and upload images when raising a support ticket in the KFON LNP application.</string>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location access is required to provide location-based services in the KFON LNP application.</string>
+
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

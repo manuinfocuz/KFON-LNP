@@ -2,8 +2,11 @@ class AppEndPoints {
   AppEndPoints._();
 
   static bool isLive = true;
-
-  static get BASEURL => isLive ? "testapi.kfon.co.in" : "testapi.kfon.co.in";
+  // Test URL
+  //   static get BASEURL => isLive ? "testapi.kfon.co.in" : "testapi.kfon.co.in";
+  // Live URL
+  // https://api.kfon.co.in/api/auth/login
+    static get BASEURL => isLive ? "api.kfon.co.in" : "api.kfon.co.in";
 
   static String SUBURL = "api/anp/";
   static String GETTOKEN = "api/auth/login";
@@ -11,9 +14,6 @@ class AppEndPoints {
   static String SEND_OTP_FOR_LOGIN = "${SUBURL}securitylnplogin";
   static String SUB_LOGIN = "${SUBURL}connectwithotp";
   static String SUB_LOGIN_RE = "${SUBURL}reconnectlnp";
-
-
-
   static String POSTLOGIN = "${SUBURL}connect";
   static String POSTPROFILE = "${SUBURL}profile";
   static String CHANGEPASSWORD = "${SUBURL}cpassword";

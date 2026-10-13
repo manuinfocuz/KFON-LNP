@@ -16,6 +16,7 @@ import '../../utils/global_variables.dart';
 import '../../utils/routes.dart';
 import '../../widget/utils_widgets/custom_button.dart';
 import '../../widget/utils_widgets/custom_textfiled.dart';
+import '../../widget/utils_widgets/remembered_logins_sheet.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -29,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String? unError;
   final LocaleProvider _localeProvider = Get.find();
   bool isTryingUAT = false;
+  bool rememberMe = false;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 setState(() {});
                               },
                               controller: provider.userNameEditingController,
+                              onTab: () => showRememberedLogins(provider),
                             ),
                             const SizedBox(height: 20),
                             CustomTextField(
@@ -95,7 +98,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               controller: provider.passwordEditingController,
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 5),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: rememberMe,
+                                  activeColor: primaryColor,
+                                  onChanged: (value) {
+                                    debugPrint('[RememberMe] checkbox -> $value');
+                                    setState(() => rememberMe = value ?? false);
+                                  },
+                                ),
+                                const Text('Remember me'),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 5),
@@ -227,10 +244,38 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    debugPrint('[RememberMe] Send OTP pressed, rememberMe=$rememberMe');
     provider.sendOtpLogin(
       _localeProvider,
       provider.userNameEditingController.text,
       provider.passwordEditingController.text,
+      rememberMe: rememberMe,
     );
+  }
+
+  Future<void> showRememberedLogins(AuthProvider provider) async {
+    debugPrint('[RememberMe] username field tapped');
+    final logins = await provider.getRememberedLogins();
+    if (!mounted || logins.isEmpty) {
+      debugPrint('[RememberMe] not showing sheet (mounted=$mounted, count=${logins.length})');
+      return;
+    }
+    FocusScope.of(context).unfocus();
+
+    final selected = await showRememberedLoginsSheet(
+      context,
+      logins: logins,
+      onDelete: (login) => provider.deleteRememberedLogin(login.username),
+    );
+    debugPrint('[RememberMe] sheet closed, selected=${selected?.username}');
+    if (selected == null) return;
+
+    provider.userNameEditingController.text = selected.username;
+    provider.passwordEditingController.text = selected.password;
+    setState(() {
+      unError = null;
+      pwError = null;
+      rememberMe = true;
+    });
   }
 }
